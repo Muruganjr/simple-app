@@ -14,20 +14,26 @@ pipeline {
         
         stage('Upload War To Nexus') {
             steps {
-                nexusArtifactUploader artifacts: [
-                    [
-                        artifactId: 'simple-app', 
-                        classifier: '', 
-                        file: 'target/simple-app-3.0.0-SNAPSHOT.war', 
-                        type: 'war'
-                    ]
-                ], 
-                credentialsId: 'nexus-cre', 
-                groupId: 'in.javahome', 
-                nexusUrl: '43.204.216.4:8081', 
-                nexusVersion: 'nexus3', protocol: 'http', 
-                repository: 'http://43.204.216.4:8081/repository/simpleapp-snapshot/', 
-                version: '3.0.0-SNAPSHOT'
+                script {
+                    def mavenInfo = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true).trim()
+                    nexusArtifactUploader(
+                        artifacts: [
+                            [
+                                artifactId: 'simple-app', 
+                                classifier: '', 
+                                file: 'target/simple-app-' + mavenInfo + '.war', 
+                                type: 'war'
+                            ]
+                        ], 
+                        credentialsId: 'nexus-cre', 
+                        groupId: 'in.javahome', 
+                        nexusUrl: 'http://43.204.216.4:8081', 
+                        nexusVersion: 'nexus3', 
+                        protocol: 'http', 
+                        repository: 'simpleapp-snapshot', 
+                        version: mavenInfo
+                    )
+                }
             }
         }
     }
