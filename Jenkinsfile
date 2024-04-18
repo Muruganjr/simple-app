@@ -4,6 +4,11 @@ pipeline {
     tools {
         maven 'maven3'
     }
+    
+    environment {
+        // Define the location of SonarScanner
+        SCANNER_HOME = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+    }
 
     stages {
         stage('Build') {
