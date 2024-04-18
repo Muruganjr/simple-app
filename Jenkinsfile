@@ -21,7 +21,7 @@ pipeline {
             steps {
                 // Run SonarQube analysis
                 withSonarQubeEnv('sonar') {
-                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Boardgame -Dsonar.projectKey=Boardgame -Dsonar.java.binaries=target/classes"
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=simple-app -Dsonar.projectKey=simple-app -Dsonar.java.binaries=target/classes"
                 }
             }
         }
