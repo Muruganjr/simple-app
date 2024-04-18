@@ -12,6 +12,15 @@ pipeline {
             }
         }
         
+        stage('SonarQube Analysis') {
+            steps {
+                // Run SonarQube analysis
+                withSonarQubeEnv('sonar') {
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Boardgame -Dsonar.projectKey=Boardgame -Dsonar.java.binaries=target/classes"
+                }
+            }
+        }
+        
         stage('Upload War To Nexus') {
             steps {
                 script {
