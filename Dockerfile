@@ -1,33 +1,14 @@
-# Use the OpenJDK 17 official image
-FROM openjdk:17-jdk-slim AS build
+# Use the latest OpenJDK image
+FROM openjdk:17-jdk-alpine
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copy the Maven wrapper
-COPY mvnw .
-COPY .mvn .mvn
+# Copy the packaged war file into our docker image
+COPY target/simple-app-3.0.0-SNAPSHOT.war /usr/src/app/app.war
 
-# Copy the Project Object Model (POM) file
-COPY pom.xml .
-
-# Copy the source code
-COPY src src
-
-# Build the application
-RUN ./mvnw install -DskipTests
-
-# Use AdoptOpenJDK 17 with HotSpot JRE on Alpine Linux
-FROM adoptopenjdk:17-jre-hotspot AS production
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the executable JAR file from the build stage to the production stage
-COPY --from=build /app/target/*.jar app.jar
-
-# Expose the port
+# Make port 8080 available to the world outside this container
 EXPOSE 8080
 
-# Command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Define the command to run your application
+CMD ["java", "-jar", "app.war"]
