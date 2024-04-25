@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY target/simple-app-3.0.0-SNAPSHOT.war /usr/src/app/app.war
 
 # Make port 8080 available to the world outside this container
-EXPOSE 8080
+EXPOSE 9090
 
 # Define the command to run your application
 CMD ["java", "-jar", "app.war"]
